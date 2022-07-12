@@ -3,15 +3,21 @@ const generateString = require("../utilities/urlgenerator");
 
 const Addurl = async (req, res, next) => {
   const originalUrl = req.query.url;
+  //check if url already shorted and database has it
+  const rawUrl = await dbmodel.findOne({ url: originalUrl });
   // check if user entered the url
   if (!originalUrl) {
     res.status(400);
     res.send("please give us the url");
   }
-
-  //check if url already shorted and database has it
-  const rawUrl = await dbmodel.findOne({ url: originalUrl });
-  if (rawUrl) {
+  if (
+    !originalUrl.startsWith("http://") ||
+    !originalUrl.startsWith("https://")
+  ) {
+    res
+      .status(400)
+      .send("please send a url that starts with http:// or https://");
+  } else if (rawUrl) {
     res.status(400);
     res.send("url already exists");
   } else {
