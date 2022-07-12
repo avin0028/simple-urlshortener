@@ -23,13 +23,21 @@ const Addurl = async (req, res, next) => {
       shorted: randomurl,
     });
     //showing the shorted url to user
-    siteurl = req.protocol + "//" + req.get("host");
+    siteurl = req.protocol + "://" + req.get("host");
     res.status(201);
     res.send(`short url created : ${siteurl}/${randomurl} `);
   }
 };
-const Geturl = (req, res) => {
-  res.send("getting url");
+const Geturl = async (req, res) => {
+  const shortedurl = req.params.url;
+  // check if shorted url exists and if it was redirect user
+  const shorted = await dbmodel.findOne({ shorted: shortedurl });
+
+  if (!shorted) {
+    res.status(404).send("url not found");
+  } else {
+    res.redirect(shorted.url);
+  }
 };
 
 module.exports = { Addurl, Geturl };

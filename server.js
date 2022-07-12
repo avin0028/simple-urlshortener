@@ -21,10 +21,8 @@ const dbconnect = async (uri) => {
 };
 dbconnect(mongodbURI);
 
-//middlewares
-
 //routes
-app.use("/api", apiroutes);
+app.use(apiroutes);
 
 //listener
 app.listen(PORT, () => {

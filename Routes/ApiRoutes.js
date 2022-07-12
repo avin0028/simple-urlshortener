@@ -3,6 +3,6 @@ const { Addurl, Geturl } = require("../Controllers/ApiControllers");
 const router = express.Router();
 
 router.get("/add", Addurl);
-router.get("/", Geturl);
+router.get("/:url", Geturl);
 
 module.exports = router;
